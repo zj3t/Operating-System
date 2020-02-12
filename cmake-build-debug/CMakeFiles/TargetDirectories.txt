@@ -1,0 +1,3 @@
+/cygdrive/c/Users/yby-lab/CLionProjects/Operating-System/cmake-build-debug/CMakeFiles/edit_cache.dir
+/cygdrive/c/Users/yby-lab/CLionProjects/Operating-System/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/cygdrive/c/Users/yby-lab/CLionProjects/Operating-System/cmake-build-debug/CMakeFiles/MINT64.dir
