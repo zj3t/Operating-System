@@ -1,1 +1,0 @@
-/usr/bin/cc  -g  -Wl,--enable-auto-import CMakeFiles/MINT64.dir/MINT64/main.c.o  -o MINT64.exe -Wl,--out-implib,libMINT64.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
