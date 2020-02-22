@@ -12,7 +12,7 @@ print_log()
 }
 
 
-#sudo apt-get -y update
+sudo apt-get -y update
 print_log "Installing gcc Package"
 url="https://ftp.gnu.org/gnu/gcc/gcc-9.2.0/gcc-9.2.0.tar.xz"
 package="gcc-9.2.0"
