@@ -139,6 +139,5 @@ else
     cd $PROJECT_ROOT
 fi
 
-sudo apt-get install qemu
 print_log "Done!"
 
