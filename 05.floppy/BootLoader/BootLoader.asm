@@ -26,9 +26,9 @@ START:
 	add si,2
 	cmp si, 80 * 25 * 2 ; screen total size
 
-	jl .SCREEN_CLEAR_LOOP:
+	jl .SCREEN_CLEAR_LOOP
 
-	push msg1
+	push MSG1
 	push 0
 	push 0
 	call PRINT_MSG
@@ -62,7 +62,7 @@ READ_DATA:
 	mov al, 0x1 ; To Read Sector Number
 	mov ch, byte[TRACK_NUMBER]
 	mov cl, byte[SECTOR_NUMBER]
-	mov dh, byte[HEADNUMBER]
+	mov dh, byte[HEAD_NUMBER]
 	mov dl, 0x00
 	int 0x13
 	jc HANDLE_DISK_ERROR
@@ -84,7 +84,7 @@ READ_DATA:
 	cmp byte[HEAD_NUMBER], 0x00
 	jne READ_DATA
 
-	add bytep[TRACK_NUMBER], 0x01
+	add byte[TRACK_NUMBER], 0x01
 	jmp READ_DATA
 READ_END:
 
