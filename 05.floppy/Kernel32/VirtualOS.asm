@@ -9,9 +9,9 @@ SECTOR_COUNT:	dw 0x0000
 TOTAL_SECTOR_COUNT: equ 1024
 
 START:
-	mov ax. cs
+	mov ax, cs
 	mov ds,	ax
-	mov	ax,	0xB800
+	mov ax, 0xB800
 	mov es,	ax
 
 	%assign i 0
@@ -30,5 +30,5 @@ START:
 			jmp (0x1000 + i * 0x20): 0x0000
 		%endif
 
-		times 512 - ( $ - $$  % 512) db 0x00
-
+		times (512 - ( $ - $$)  % 512) db 0x00
+	%endrep
