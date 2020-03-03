@@ -67,7 +67,7 @@ READ_DATA:
 	int 0x13
 	jc HANDLE_DISK_ERROR
 
-	add si, 0x200
+	add si, 0x20
 	mov es, si
 
 	mov al, byte[SECTOR_NUMBER]
