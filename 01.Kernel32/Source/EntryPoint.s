@@ -1,3 +1,9 @@
+# file      EntryPoint.s
+# date      2008/11/27
+# author    kkamagui 
+#           Copyright(c)2008 All rights reserved by kkamagui
+# brief     보호 모드 커널 엔트리 포인트에 관련된 소스 파일
+
 [ORG 0x00]          ; 코드의 시작 어드레스를 0x00으로 설정
 [BITS 16]           ; 이하의 코드는 16비트 코드로 설정
 
@@ -11,7 +17,7 @@ START:
                     ; 세그먼트 레지스터 값으로 변환
     mov ds, ax      ; DS 세그먼트 레지스터에 설정
     mov es, ax      ; ES 세그먼트 레지스터에 설정
-
+    
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ; A20 게이트를 활성화
     ; BIOS를 이용한 전환이 실패했을 때 시스템 컨트롤 포트로 전환 시도
@@ -30,7 +36,7 @@ START:
     and al, 0xFE    ; 시스템 리셋 방지를 위해 0xFE와 AND 연산하여 비트 0를 0으로 설정
     out 0x92, al    ; 시스템 컨트롤 포트(0x92)에 변경된 값을 1 바이트 설정
     
-.A20GATESUCCESS:    
+.A20GATESUCCESS:
     cli             ; 인터럽트가 발생하지 못하도록 설정
     lgdt [ GDTR ]   ; GDTR 자료구조를 프로세서에 설정하여 GDT 테이블을 로드
 
@@ -45,7 +51,6 @@ START:
 
     ; 커널 코드 세그먼트를 0x00을 기준으로 하는 것으로 교체하고 EIP의 값을 0x00을 기준으로 재설정
     ; CS 세그먼트 셀렉터 : EIP
-    ;jmp dword 0x08: ( PROTECTEDMODE - $$ + 0x10000 )
     jmp dword 0x18: ( PROTECTEDMODE - $$ + 0x10000 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -55,8 +60,7 @@ START:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [BITS 32]               ; 이하의 코드는 32비트 코드로 설정
 PROTECTEDMODE:
-    mov ax, 0x20
-    ;mov ax, 0x10        ; 보호 모드 커널용 데이터 세그먼트 디스크립터를 AX 레지스터에 저장
+    mov ax, 0x20        ; 보호 모드 커널용 데이터 세그먼트 디스크립터를 AX 레지스터에 저장
     mov ds, ax          ; DS 세그먼트 셀렉터에 설정
     mov es, ax          ; ES 세그먼트 셀렉터에 설정
     mov fs, ax          ; FS 세그먼트 셀렉터에 설정
@@ -74,8 +78,8 @@ PROTECTEDMODE:
     call PRINTMESSAGE                               ; PRINTMESSAGE 함수 호출
     add esp, 12                                     ; 삽입한 파라미터 제거
 
-    ;jmp dword 0x08: 0x10200 ; C 언어 커널이 존재하는 0x10200 어드레스로 이동하여 C 언어 커널 수행
-    jmp dword 0x18: 0x10200
+    jmp dword 0x18: 0x10200 ; C 언어 커널이 존재하는 0x10200 어드레스로 이동하여 C 언어 커널 수행
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;   함수 코드 영역
@@ -163,22 +167,24 @@ GDT:
         db 0x00
         db 0x00
 
-    IA_32eCODEDESCRIPTOR:
-	dw 0xFFFF
-	dw 0x0000
-	db 0x00
-	db 0x9A
-	db 0xAF
-	db 0x00
-
+    ; IA-32e 모드 커널용 코드 세그먼트 디스크립터
+    IA_32eCODEDESCRIPTOR:     
+        dw 0xFFFF       ; Limit [15:0]
+        dw 0x0000       ; Base [15:0]
+        db 0x00         ; Base [23:16]
+        db 0x9A         ; P=1, DPL=0, Code Segment, Execute/Read
+        db 0xAF         ; G=1, D=0, L=1, Limit[19:16]
+        db 0x00         ; Base [31:24]  
+        
+    ; IA-32e 모드 커널용 데이터 세그먼트 디스크립터
     IA_32eDATADESCRIPTOR:
-	dw 0xFFFF
-	dw 0x0000
-	db 0x00
-	db 0x92
-	db 0xAF
-	db 0x00 
-
+        dw 0xFFFF       ; Limit [15:0]
+        dw 0x0000       ; Base [15:0]
+        db 0x00         ; Base [23:16]
+        db 0x92         ; P=1, DPL=0, Data Segment, Read/Write
+        db 0xAF         ; G=1, D=0, L=1, Limit[19:16]
+        db 0x00         ; Base [31:24]
+        
     ; 보호 모드 커널용 코드 세그먼트 디스크립터
     CODEDESCRIPTOR:     
         dw 0xFFFF       ; Limit [15:0]

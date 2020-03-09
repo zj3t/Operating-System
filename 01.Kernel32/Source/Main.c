@@ -5,6 +5,7 @@
 void kPrintString( int iX, int iY, const char* pcString );
 BOOL kInitializeKernel64Area( void );
 BOOL kIsMemoryEnough( void );
+void kCopyKernel64ImageTo2Mbyte(void);
 
 void Main( void )
 {
@@ -12,6 +13,7 @@ void Main( void )
     DWORD dwEAX, dwEBX, dwECX, dwEDX;
     char vcVendorString[13] = {0,};
 
+    kPrintString(0, 3, "Protect Mode C language Kernel Start!! ..[Pass]");
     kPrintString( 0, 3, "C Language Kernel Start.....................[Pass]" );
     
     // 최소 메모리 크기를 만족하는 지 검사
@@ -40,7 +42,7 @@ void Main( void )
 
     kPrintString(0, 6, "IA-32e Page Tables Init....[ ]");
     kInitializePageTables();
-    kPrintString(45,6, "Create Page Table Pass");
+    kPrintString(45,6, "Create Page Table....Pass");
 
     //chapter 10. add....
     kRead_CPU_ID( 0x00, &dwEAX, &dwEBX, &dwECX, &dwEDX );
@@ -63,8 +65,12 @@ void Main( void )
         while( 1 ) ;
     }
 
-    kPrintString( 0, 9, "Switch To IA-32e Mode" );
-    //kSwitch_And_Execute_64bit_Kernel();
+    kPrintString(0, 9, "Copy IA-32e Kernel To 2M Address...[ ]");
+    kCopyKernel64ImageTo2Mbyte();
+    kPrintString(45,9,"PASS!!");
+
+    kPrintString( 0, 10, "Switch To IA-32e Mode" );
+    kSwitch_And_Execute_64bit_Kernel();
 
     while( 1 ) ;
 }
@@ -144,4 +150,21 @@ BOOL kIsMemoryEnough( void )
         pdwCurrentAddress += ( 0x100000 / 4 );
     }
     return TRUE;
+}
+
+void kCopyKernel64ImageTo2Mbyte(void){
+	WORD wKernel32SectorCount, wTotalKernelSectorCount;
+	DWORD* pdwSourceAddress, *pdwDestinationAddress;
+	
+	wTotalKernelSectorCount = *((WORD*) 0x7C05);
+	wKernel32SectorCount = *((WORD*) 0x7C07);
+
+	pdwSourceAddress = (DWORD*)(0x10000 + (wKernel32SectorCount * 512));
+	pdwDestinationAddress = (DWORD*) 0x200000;
+
+	for (int i=0; i< 512 * (wTotalKernelSectorCount - wKernel32SectorCount)/4; i++){
+		*pdwDestinationAddress = *pdwSourceAddress;
+		pdwDestinationAddress++;
+		pdwSourceAddress++;
+	}
 }
