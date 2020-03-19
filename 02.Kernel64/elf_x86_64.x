@@ -1,15 +1,16 @@
 /* Default linker script, for normal executables */
+/*asdasd*/
 OUTPUT_FORMAT("elf64-x86-64", "elf64-x86-64",
 	      "elf64-x86-64")
 OUTPUT_ARCH(i386:x86-64)
 ENTRY(_start)
-SEARCH_DIR("/usr/cross/x86_64-pc-linux/lib64"); SEARCH_DIR("/usr/cross/x86_64-pc-linux/lib");
+SEARCH_DIR("/usr/local/x86_64-pc-linux-gnu/lib64"); SEARCH_DIR("/usr/local/lib64"); SEARCH_DIR("/lib64"); SEARCH_DIR("/usr/lib64"); SEARCH_DIR("/usr/local/x86_64-pc-linux-gnu/lib"); SEARCH_DIR("/usr/local/lib"); SEARCH_DIR("/lib"); SEARCH_DIR("/usr/lib");
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */
   PROVIDE (__executable_start = 0x400000); . = 0x400000 + SIZEOF_HEADERS;
 /*********************************************************************************/
-/*  ¼½¼Ç Àç¹èÄ¡·Î ÀÎÇØ ¾ÕÀ¸·Î ÀÌµ¿µÈ ºÎºĞ */
+/*  ì„¹ì…˜ ì¬ë°°ì¹˜ë¡œ ì¸í•´ ì•ìœ¼ë¡œ ì´ë™ëœ ë¶€ë¶„ */
   .text 0x200000         :
   {
     *(.text .stub .text.* .gnu.linkonce.t.*)
@@ -20,7 +21,7 @@ SECTIONS
   .rodata         : { *(.rodata .rodata.* .gnu.linkonce.r.*) }
   .rodata1        : { *(.rodata1) }
 
-  /* µ¥ÀÌÅÍ ¿µ¿ªÀÇ ½ÃÀÛÀ» ¼½ÅÍ ´ÜÀ§·Î ¸ÂÃã */
+  /* ë°ì´í„° ì˜ì—­ì˜ ì‹œì‘ì„ ì„¹í„° ë‹¨ìœ„ë¡œ ë§ì¶¤ */
   . = ALIGN (512);
 
   .data           :
@@ -167,7 +168,7 @@ SECTIONS
 
   .got.plt        : { *(.got.plt) }
 /*********************************************************************************/
-/* ¼½¼Ç Àç¹èÄ¡·Î ÀÎÇØ ÀÌµ¿µÈ ºÎºĞ */
+/* ì„¹ì…˜ ì¬ë°°ì¹˜ë¡œ ì¸í•´ ì´ë™ëœ ë¶€ë¶„ */
   _edata = .; PROVIDE (edata = .);
 /*********************************************************************************/
   .lbss   :

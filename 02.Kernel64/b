@@ -2,12 +2,12 @@
 # 빌드 환경 및 규칙 설정 
 ################################################################################
 # 컴파일러 및 링커 정의
-NASM64 = nasm -f elf64
-GCC64 = gcc -c -m64 -ffreestanding
+NASM64 = nasm
+GCC32 = gcc -c -m64 -ffreestanding
 LD64 = ld -melf_x86_64 -T ../elf_x86_64.x -nostdlib -e Main -Ttext 0x200000
 
 # 바이너리 이미지 생성을 위한 OBJCOPY 옵션 정의
-OBJCOPY64 = objcopy -j .text -j .data -j .rodata -j .bss -S -O binary
+OBJCOPY32 = objcopy -j .text -j .data -j .rodata -j .bss -S -O binary
 
 # 디렉터리 정의
 OBJECTDIRECTORY = Temp
@@ -23,6 +23,9 @@ all: prepare Kernel64.bin
 prepare:
 	mkdir -p $(OBJECTDIRECTORY)
 
+# 커널 엔트리 포인트 빌드
+#$(OBJECTDIRECTORY)/EntryPoint.bin: $(SOURCEDIRECTORY)/EntryPoint.s
+#	$(NASM64) -f elf 64 -o $@ $<
 
 # 커널의 C 소스 파일에 대한 의존성 정보 생성
 dep:
@@ -34,9 +37,13 @@ dep:
 ExecuteInternalBuild: dep
 	make -C $(OBJECTDIRECTORY) -f ../Makefile Kernel64.elf
 
-# 커널 이미지를 바이너리 파일로 변환하여 IA-32e 모드 바이너리 생성
+# 커널 이미지를 바이너리 파일로 변환
 Kernel64.bin: ExecuteInternalBuild
-	$(OBJCOPY64) $(OBJECTDIRECTORY)/Kernel64.elf $@
+	$(OBJCOPY32) $(OBJECTDIRECTORY)/Kernel64.elf $@
+
+# 엔트리 포인트와 커널을 합쳐서 보호 모드 바이너리 생성
+# Kernel32.bin: $(OBJECTDIRECTORY)/EntryPoint.bin $(OBJECTDIRECTORY)/Kernel32.elf.bin
+#	cat $^ > $@
 		
 # 소스 파일을 제외한 나머지 파일 정리	
 clean:
@@ -46,18 +53,14 @@ clean:
 ################################################################################
 # Make에 의해 다시 호출되는 부분, Temp 디렉터리를 기준으로 수행됨
 ################################################################################
-# 빌드할 어셈블리어 엔트리 포인트 소스 파일 정의, Temp 디렉터리를 기준으로 설정
+# 빌드할 C 소스 파일 정의, Temp 디렉터리를 기준으로 설정
 ENTRYPOINTSOURCEFILE = ../$(SOURCEDIRECTORY)/EntryPoint.s
 ENTRYPOINTOBJECTFILE = EntryPoint.o
-# 빌드할 C 소스 파일 정의, Temp 디렉터리를 기준으로 설정
+CENTRYPOINTOBJECTFILE = Main.o
 CSOURCEFILES = $(wildcard ../$(SOURCEDIRECTORY)/*.c)
 ASSEMBLYSOURCEFILES = $(wildcard ../$(SOURCEDIRECTORY)/*.asm)
 COBJECTFILES = $(notdir $(patsubst %.c,%.o,$(CSOURCEFILES)))
 ASSEMBLYOBJECTFILES = $(notdir $(patsubst %.asm,%.o,$(ASSEMBLYSOURCEFILES)))
-
-# 어셈블리어 엔트리 포인트 빌드
-$(ENTRYPOINTOBJECTFILE): $(ENTRYPOINTSOURCEFILE)
-	$(NASM64) -o $@ $<
 
 # .c 파일을 .o 파일로 바꾸는 규칙 정의
 %.o: ../$(SOURCEDIRECTORY)/%.c
@@ -65,7 +68,7 @@ $(ENTRYPOINTOBJECTFILE): $(ENTRYPOINTSOURCEFILE)
 
 # .asm 파일을 .o 파일로 바꾸는 규칙 정의
 %.o: ../$(SOURCEDIRECTORY)/%.asm
-	$(NASM64) -o $@ $<
+	$(NASM64) -f elf64 -o $@ $<
 
 # 실제 의존성에 관련된 파일을 생성
 InternalDependency:
