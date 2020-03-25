@@ -22,7 +22,7 @@ We developed in the following environment. We write a script to build the enviro
 3. Dockerhub
 We also distributed the [images](https://hub.docker.com/layers/koreasecurity/dev/os_dev/images/sha256-bfcea4954aaa7ec4e88852d2870996aa6a6d5f9daebb914cc3ef4b3f538daebe?context=repo) needed for the experiment to dockerhub. You can simply download the configured image using the following command:
 
-    $ docker run -it koreasecurity/dev:os_dev
+  https://hub.docker.com/layers/koreasecurity/dev/os_dev
     
 
 
@@ -42,3 +42,6 @@ We also distributed the [images](https://hub.docker.com/layers/koreasecurity/dev
 	*  $ sudo apt-get update
 
 	*  $ sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+2. Run Develop Environments
+	*  $ docker run -it koreasecurity/dev:os_dev
