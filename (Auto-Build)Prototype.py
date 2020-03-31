@@ -1,8 +1,13 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*- 
+
 ## Contributors to development
 # Sang-Hoon Choi, csh0052@gmail.com
 #
 import docker
 import subprocess,shutil
+import os
+
 def copy_img(src):
     try:
         shutil.copyfile(src+'Disk.img','Disk.img')
@@ -24,12 +29,13 @@ def get_log(log_file):
 
 dev_container_name="DEV_OS"
 cli = docker.Client(base_url='unix://var/run/docker.sock')
+
 try: #개발환경 체크
     data=cli.inspect_container(dev_container_name)
 except:
-    subprocess.check_output('docker run -td --name DEV_OS koreasecurity/dev:os_dev',shell=True) #컨테이너 스탑
+    subprocess.check_output('docker run -td -v '+ os.getcwd() +':/root/Operating-System --name DEV_OS koreasecurity/dev:os_dev',shell=True) #컨테이너 스탑
 
-option=input("1. Make, 2. ?? , 3..").strip() #향후 확장용
+option=str(input("1. Make, 2. ?? , 3..")).strip() #향후 확장용
 
 if str(option) is '1':
     subprocess.check_output('docker exec -td '+str(dev_container_name)+' /bin/bash -c \"make -C /root/Operating-System > /root/Operating-System/make.log\"', shell=True)  # 컨테이너 스탑
