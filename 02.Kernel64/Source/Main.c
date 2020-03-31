@@ -18,7 +18,7 @@ void Main( void )
     kPrintString( 0, 11, "IA-32e C Language Kernel Start..............[Pass]" );
     kPrintString( 0, 12, "Keyboard Activate...........................[    ]" );
     
-    // 키보드를 활성화
+    // 키보드를 활성화 
     if( kActivateKeyboard() == TRUE )
     {
         kPrintString( 45, 12, "Pass" );
