@@ -2,4 +2,5 @@
 *.bin
 *.elf
 *.dep
+*.log
 src/
