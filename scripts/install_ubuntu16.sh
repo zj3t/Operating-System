@@ -13,25 +13,15 @@ print_log()
 
 
 sudo apt-get -y update
-print_log "Installing gcc Package"
-url="https://ftp.gnu.org/gnu/gcc/gcc-9.2.0/gcc-9.2.0.tar.xz"
-package="gcc-9.2.0"
-mkdir -p $PROJECT_ROOT/src && cd $PROJECT_ROOT/src
-if [ -e "$package" ]; then
-	print_log "$package exists"
-else
-	wget $url -P $PROJECT_ROOT/src/
-	tar -xvf "$package.tar.xz" && cd "$package"
-	./configure && make  && sudo make install
-	cd $PROJECT_ROOT
-fi
-unset url && unset package
 
 print_log "Installing multilib compiler"
 sudo apt-get -y install gcc-multilib g++-multilib
 
+print_log "Installing makeinfo "
+sudo apt-get -y install makeinfo
+
 print_log "Installing GNU Binutils Package"
-url="https://ftp.gnu.org/gnu/binutils/binutils-2.34.tar.xz"
+url="https://fossies.org/linux/misc/binutils-2.34.tar.xz"
 package="binutils-2.34"
 mkdir -p $PROJECT_ROOT/src && cd $PROJECT_ROOT/src
 if [ -e "$package" ]; then
@@ -88,6 +78,26 @@ else
 fi
 unset url && unset package
 
+
+print_log "Installing gcc Package"
+sudo apt-get -y install m4
+print_log "Installing m4 for gcc complie"
+
+url="https://fossies.org/linux/misc/gcc-9.2.0.tar.xz"
+package="gcc-9.2.0"
+
+mkdir -p $PROJECT_ROOT/src && cd $PROJECT_ROOT/src
+if [ -e "$package" ]; then
+	print_log "$package exists"
+else
+	wget $url -P $PROJECT_ROOT/src/
+	tar -xvf "$package.tar.xz" && cd "$package"
+	./configure --disable-nls --enable-languages=c --without-hearders --disable-shared --enable-multilib --disable-bootstrap && make configure-host  && make all-gcc && make install-gcc
+	cd $PROJECT_ROOT
+fi
+unset url && unset package
+
+
 print_log "Installing nasm Package"
 sudo apt-get install nasm
 
@@ -140,4 +150,3 @@ else
 fi
 
 print_log "Done!"
-
