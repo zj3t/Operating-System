@@ -53,3 +53,4 @@ We also distributed the [images](https://hub.docker.com/layers/koreasecurity/dev
 	*  $ sudo apt-get install python3-pip
 3. docker lib install
 	*  $ sudo pip3 install pydocker
+4. python3 Prototype.py
