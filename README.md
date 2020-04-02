@@ -45,3 +45,11 @@ We also distributed the [images](https://hub.docker.com/layers/koreasecurity/dev
 
 2. Run Develop Environments
 	*  $ docker run -it koreasecurity/dev:os_dev
+
+# 4. AutoBuild
+1. python3
+	*  $ sudo apt-get install python3
+2. pip3 
+	*  $ sudo apt-get install python3-pip
+3. docker lib install
+	*  $ sudo pip3 install pydocker
