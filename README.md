@@ -46,7 +46,7 @@ We also distributed the [images](https://hub.docker.com/layers/koreasecurity/dev
 2. Run Develop Environments
 	*  $ docker run -it koreasecurity/dev:os_dev
 
-# 4. AutoBuild
+# 4. Auto Build
 1. python3
 	*  $ sudo apt-get install python3
 2. pip3 
