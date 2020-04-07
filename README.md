@@ -49,8 +49,6 @@ We also distributed the [images](https://hub.docker.com/layers/koreasecurity/dev
 # 4. Auto Build
 1. python3
 	*  $ sudo apt-get install python3
-2. pip3 
-	*  $ sudo apt-get install python3-pip
-3. requirements
+2. requirements
 	*  $ pip3 install -r requirements.txt
-4. python3 Prototype.py [dir]
+3. python3 Prototype.py
