@@ -7,7 +7,7 @@ This project is based on the book "**IT EXPERT, 64비트 멀티코어 OS 원리�
 We developed in the following environment. We write a script to build the environment, which can be easily built using the install script located at `scripts/install_<os_name>.sh`.
 
 1. OS
-	* Ubuntu 16.04.6 LTS(xenial)
+	* Ubuntu 18.04
 
 2. Required Package
 	* binutils-2.34
