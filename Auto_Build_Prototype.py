@@ -5,14 +5,21 @@ import docker
 import subprocess,shutil
 from termcolor import colored
 
+def status_check(data):
+    status = data['State']['Status']
+    if status == 'exited':
+        print(colored("[INFO] DEV_OS start", "yellow"))
+        subprocess.check_output('docker start DEV_OS', shell=True)
+
+
 def source_copy(src):
     try:
         source_dir=get_dir+'/root/'
         subprocess.check_output('cp -R Operating-System '+str(source_dir), shell=True)
         print(colored("[INFO] Source Copy From .Operating-System", "yellow"))
     except Exception as e:
-        subprocess.check_output('cp -R * '+str(source_dir), shell=True)
-        
+        print(colored(e, "red"))
+        print(colored("ERROR","yellow"))
 def copy_img(src):
     try:
         shutil.copyfile(src+'Disk.img','Disk.img')
@@ -37,12 +44,7 @@ cli = docker.Client(base_url='unix://var/run/docker.sock')
 
 try: #개발환경 체크
     data=cli.inspect_container(dev_container_name)
-    status=data['State']['Status']
-    
-    if status=='exited':
-        print(colored("[INFO] DEV_OS start", "yellow"))
-        subprocess.check_output('docker start DEV_OS',shell=True)
-
+    status_check(data)
 except:
     subprocess.check_output('docker run -td --name DEV_OS koreasecurity/dev:os_dev',shell=True) #컨테이너 스탑
 
