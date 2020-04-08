@@ -1,9 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*- 
+
 ## Contributors to development
 # Sang-Hoon Choi, csh0052@gmail.com
+# Sung-Kyung Kim, jotun9935@gmail.com
 #
 import docker
 import subprocess,shutil
 from termcolor import colored
+import os
 
 def status_check(data):
     status = data['State']['Status']
@@ -15,18 +20,24 @@ def status_check(data):
 def source_copy(src):
     try:
         source_dir=get_dir+'/root/'
-        subprocess.check_output('cp -R Operating-System '+str(source_dir), shell=True)
+        cmd = 'cp -R ' + os.getcwd() + ' ' + str(source_dir)
+        subprocess.check_output(cmd, shell=True)
         print(colored("[INFO] Source Copy From .Operating-System", "yellow"))
+
     except Exception as e:
         print(colored(e, "red"))
         print(colored("ERROR","yellow"))
+
 def copy_img(src):
     try:
         shutil.copyfile(src+'Disk.img','Disk.img')
         print(colored("[INFO] Completed", "yellow"))
         print(colored("U can try: qemu-system-x86_64 -m 64 -drive format=raw,file=Disk.img,index=0,if=floppy", "yellow"))
+
     except:
         print(colored("ERROR","yellow"))
+
+
 def get_log(log_file):
     log_f=open(log_file,'r')
     log=''
@@ -45,6 +56,8 @@ cli = docker.Client(base_url='unix://var/run/docker.sock')
 try: #개발환경 체크
     data=cli.inspect_container(dev_container_name)
     status_check(data)
+
+
 except:
     subprocess.check_output('docker run -td --name DEV_OS koreasecurity/dev:os_dev',shell=True) #컨테이너 스탑
 
