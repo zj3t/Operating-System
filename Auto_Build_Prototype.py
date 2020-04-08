@@ -37,6 +37,7 @@ def copy_img(src):
     except:
         print(colored("ERROR","yellow"))
 
+
 def get_log(log_file):
     log_f=open(log_file,'r')
     log=''
@@ -55,6 +56,7 @@ cli = docker.Client(base_url='unix://var/run/docker.sock')
 try: #개발환경 체크
     data=cli.inspect_container(dev_container_name)
     status_check(data)
+
 
 except:
     subprocess.check_output('docker run -td --name DEV_OS koreasecurity/dev:os_dev',shell=True) #컨테이너 스탑
