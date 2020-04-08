@@ -8,6 +8,7 @@
 
 #include "Descriptor.h"
 #include "Utility.h"
+#include "ISR.h"
 
 //==============================================================================
 //  GDT 및 TSS

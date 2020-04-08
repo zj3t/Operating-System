@@ -1,6 +1,7 @@
 #include "Types.h"
 #include "Keyboard.h"
 #include "Descriptor.h"
+#include "ISR.h"
 
 void kPrintString(int iX, int iY, const char* pcString);
 
@@ -37,13 +38,22 @@ void Main(void){
 		kPrintString(45, 15, "Fail");
 		while(1);
 	}
+
+
+	kPrintString( 0, 16, "PIC Controller And Interrupt Initialize.....[    ]" );
+	// PIC 컨트롤러 초기화 및 모든 인터럽트 활성화
+	kInitializePIC();
+	kMaskPICInterrupt( 0 );
+	kEnableInterrupt();
+	kPrintString( 45, 16, "Pass" );
+
 	while(1){
 		if(kIsOutputBufferFull() == TRUE){
 			bTemp = kGetKeyboardScanCode();
 		
 			if(kConvertScanCodeToASCIICode(bTemp, &(vcTemp[0]), &bFlags) == TRUE){
 				if(bFlags & KEY_FLAGS_DOWN){
-					kPrintString(i++, 16, vcTemp);
+					kPrintString(i++, 17, vcTemp);
 					
 					if(vcTemp[0] == '0'){
 						bTemp= bTemp / 0;
