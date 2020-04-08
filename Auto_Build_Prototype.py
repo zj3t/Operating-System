@@ -65,6 +65,7 @@ except:
 option=input("1. Make, 2. ?? , 3..").strip() #향후 확장용
 
 if str(option) is '1':
+    os.system('rm Disk.img')
     data = cli.inspect_container(dev_container_name)
     get_dir = data['GraphDriver']['Data']['MergedDir']
     source_copy(get_dir)
