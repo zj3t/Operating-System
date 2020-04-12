@@ -1,6 +1,7 @@
 #include "Types.h"
 #include "Keyboard.h"
 #include "Descriptor.h"
+#include "PIC.h"
 
 // 함수 선언
 void kPrintString( int iX, int iY, const char* pcString );
@@ -45,6 +46,12 @@ void Main( void )
         kPrintString( 45, 12, "Fail" );
         while( 1 ) ;
     }
+    kPrintString( 0, 16, "PIC Controller And Interrupt Initialize.....[    ]" );
+    // PIC 컨트롤러 초기화 및 모든 인터럽트 활성화
+    kInitializePIC();
+    kMaskPICInterrupt( 0 );
+    kEnableInterrupt();
+    kPrintString( 45, 16, "Pass" );
     
     while( 1 )
     {
