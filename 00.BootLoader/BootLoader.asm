@@ -117,7 +117,7 @@ READDATA:                           ; 디스크를 읽는 코드의 시작
     mov al, byte [ SECTORNUMBER ]       ; 섹터 번호를 AL 레지스터에 설정
     add al, 0x01                        ; 섹터 번호를 1 증가
     mov byte [ SECTORNUMBER ], al       ; 증가시킨 섹터 번호를 SECTORNUMBER에 다시 설정
-    cmp al, 19                          ; 증가시킨 섹터 번호를 19와 비교
+    cmp al, 37                          ; 증가시킨 섹터 번호를 19와 비교
     jl READDATA                         ; 섹터 번호가 19 미만이라면 READDATA로 이동
     
     ; 마지막 섹터까지 읽었으면(섹터 번호가 19이면) 헤드를 토글(0->1, 1->0)하고, 
