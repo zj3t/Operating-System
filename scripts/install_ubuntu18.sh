@@ -39,7 +39,7 @@
     #Belows are required additional packages for qemu.(https://wiki.qemu.org/Hosts/Linux)
     sudo apt install -y git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev liblzo2-dev
 
-# Belows are recommended additional packages for qemu.(https://wiki.qemu.org/Hosts/Linux)
+    # Belows are recommended additional packages for qemu.(https://wiki.qemu.org/Hosts/Linux)
     sudo apt install -y git-email
     sudo apt install -y libaio-dev libbluetooth-dev libbrlapi-dev libbz2-dev
     sudo apt install -y libcap-dev libcap-ng-dev libcurl4-gnutls-dev libgtk-3-dev
@@ -63,8 +63,10 @@
             --enable-spice				\
             --enable-usb-redir			\
             --docdir=/usr/share/doc/qemu-4.2.0 &&
-    unset QEMU_ARCH && unset QEMU_BUILD &&
-    make && sudo make install && sudo ln -sv qemu-system-`uname -m` /usr/bin/qemu
+    unset QEMU_ARCH && unset QEMU_BUILD
+    make 
+    sudo make install 
+    sudo ln -sv qemu-system-`uname -m` /usr/bin/qemu
   fi
 
   print_log "Installing Docker Pacakge from https://github.com/docker/docker-install"
