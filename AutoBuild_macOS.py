@@ -10,6 +10,7 @@ import docker
 import subprocess,shutil
 from termcolor import colored
 import os
+import time
 
 dev_container_name="DEV_OS"
 img_name="koreasecurity/dev"
@@ -42,6 +43,8 @@ try: #개발환경 체크
 
 except:
     subprocess.check_output('docker run -td --name {} {}:{}'.format(dev_container_name, img_name, img_tag),shell=True) #컨테이너 스탑
+    print(colored("[INFO] There is no container named '{}'".format(dev_container_name)))
+    print(colored("[INFO] Creating new container {} {}:{}".format(dev_container_name, img_name,       img_tag)))
 
 container_name = get_container_name(img_tag)
 os.system('rm {}'.format(output_img))
@@ -59,6 +62,10 @@ cmd = 'docker exec -td {} /bin/bash -c \"make -C {} > {}/{}\"'.format(dev_contai
 print(colored("[INFO] run command : {}".format(cmd), "yellow"))
 subprocess.check_output(cmd, shell=True)  # 컨테이너 스탑
 
+# wait for container update
+print(colored("[INFO] wait container update for {} seconds".format(5), "red"))
+time.sleep(5)
+
 cmd = 'docker cp {}:/root/Operating-System/make.log .'.format(container_name)
 print(colored("[INFO] run command : {}".format(cmd), "yellow"))
 os.system(cmd)
@@ -68,5 +75,5 @@ print(colored("[INFO] run command : {}".format(cmd), "yellow"))
 os.system(cmd)
 
 print(colored("[INFO] Build Done. U can try: ", "red"))
-print("qemu -drive format=raw,file=./Disk.img,index=0,if=floppy")
+print("qemu-system-x86_64 -m 64 -drive format=raw,file=Disk.img,index=0,if=floppy -device floppy,drive-type=144")
 

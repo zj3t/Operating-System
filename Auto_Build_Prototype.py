@@ -9,6 +9,7 @@ import docker
 import subprocess,shutil
 from termcolor import colored
 import os
+import time
 
 def status_check(data):
     status = data['State']['Status']
@@ -30,9 +31,10 @@ def source_copy(src):
 
 def copy_img(src):
     try:
+        time.sleep(5) # Waiting for compiling
         shutil.copyfile(src+'Disk.img','Disk.img')
         print(colored("[INFO] Completed", "yellow"))
-        print(colored("U can try: qemu-system-x86_64 -m 64 -drive format=raw,file=Disk.img,index=0,if=floppy", "yellow"))
+        print(colored("qemu-system-x86_64 -m 64 -drive format=raw,file=Disk.img,index=0,if=floppy -device floppy,drive-type=144", "yellow"))
 
     except:
         print(colored("ERROR","yellow"))
@@ -62,7 +64,7 @@ except:
     subprocess.check_output('docker run -td --name DEV_OS koreasecurity/dev:os_dev',shell=True) #컨테이너 스탑
 
 
-option=input("1. Make, 2. ?? , 3..").strip() #향후 확장용
+option=input("1. Make, 2. ?? , 3..\n").strip() #향후 확장용
 
 if str(option) is '1':
     os.system('rm Disk.img')
